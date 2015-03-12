@@ -1,8 +1,8 @@
 {
-  "name": "require-dir",
-  "description": "Helper to require() directories.",
+  "name": "require-dir-promise",
+  "description": "Promise-based helper to require() directories.",
   "version": "0.1.0",
-  "author": "Aseem Kishore <aseem.kishore@gmail.com>",
+  "author": "Diogo Lucas (diogo.lucas@agcocorp.com)",
   "license": "MIT",
   "dependencies": {
     "bluebird": "^2.9.13",
@@ -15,14 +15,14 @@
     "mocha": "^2.2.1"
   },
   "engines": {
-    "node": "*"
+    "node": "^0.10.33"
   },
   "scripts": {
-    "test": "node test"
+    "test": "./node_modules/.bin/mocha"
   },
-  "homepage": "https://github.com/aseemk/requireDir",
+  "homepage": "https://github.com/dclucas/require-dir-promise",
   "repository": {
     "type": "git",
-    "url": "git://github.com/aseemk/requireDir.git"
+    "url": "git://github.com/dclucas/require-dir-promise.git"
   }
 }

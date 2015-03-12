@@ -40,14 +40,11 @@ module.exports = function requireDir(dir, opts) {
             return Path.basename(f, Path.extname(f));
         });
 
-        //console.log('filter:' + JSON.stringify(_.filter(allFiles, function(f) { return _.has(require.extensions, Path.extname(f)); })));
-        //console.log('any:', _.any(require.extensions, String))
-        //console.log('any:', _.has(require.extensions, '.js'));
+        console.log('map:' + JSON.stringify(map) || 'undefined');
 
-        //console.log('map:' + JSON.stringify(map) || 'undefined');
-        //for (ext in require.extensions) { console.log('require.extensions:' + ext); };
-        //to-do: this require should be promisified as well
-        return _.reduce(map, function(res, m, key) { res[key] = require(Path.resolve(dir, m)); return res; }, { });
+        return _.values(map);
+    }).map(function(m) { 
+        return require(Path.resolve(dir, m)); 
     });
 
     for (var i = 0; i < files.length; i++) {
@@ -138,6 +135,6 @@ module.exports = function requireDir(dir, opts) {
         }
     }
 
-    console.log('map:' + JSON.stringify(map));
+    //console.log('map:' + JSON.stringify(map));
     return fp;
 };
