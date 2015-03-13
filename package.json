@@ -18,7 +18,7 @@
     "node": "^0.10.33"
   },
   "scripts": {
-    "test": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha"
+    "test": "node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha"
   },
   "homepage": "https://github.com/dclucas/require-dir-promise",
   "repository": {
