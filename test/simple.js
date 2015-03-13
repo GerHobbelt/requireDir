@@ -8,7 +8,6 @@ chai.should();
 describe('Simple tests', function(){
 	it('should import .js and .json files by default', function() {
 		return Promise.all(requireDir('./simple')).then(function(actual) {
-			console.log('actual:' + JSON.stringify(actual));
 			actual.should.deep.equal([
 				{file: 'a.js', contents: 'Content for file a.js'}, 
 				{file: 'b.json', contents: 'These are the contents of file b.json'}]);
@@ -17,14 +16,17 @@ describe('Simple tests', function(){
 	});
 });
 
-// now register CoffeeScript and do it again:
-// note that CoffeeScript shouldn't be used by any other tests! we can't rely
-// on ordering of tests, and require.extensions and require.cache are global.
-/*
-require('coffee-script');
-assert.deepEqual(requireDir('./simple'), {
-    a: 'a',
-    b: 'b',
-    c: 'c',
+describe('Simple tests', function(){
+	it('should include .coffee files if coffee-script has been required', function() {
+		require('coffee-script');
+		return Promise.all(requireDir('./simple')).then(function(actual) {
+			actual.should.deep.equal([
+				{file: 'a.js', contents: 'Content for file a.js'}, 
+				{file: 'b.json', contents: 'These are the contents of file b.json'},
+				{file: 'c.coffee', contents: 'c'}
+			]);
+			return actual;
+		});
+	});
 });
-*/
+
