@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/dclucas/require-dir-promise.svg?branch=master)](https://travis-ci.org/dclucas/require-dir-promise)
 
+[![Coverage Status](https://coveralls.io/repos/dclucas/require-dir-promise/badge.svg)](https://coveralls.io/r/dclucas/require-dir-promise)
+
 # require-dir-promise
 
 A promise-based `require` for directories, heavily inpired by [require-dir]
