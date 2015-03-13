@@ -9,9 +9,9 @@ describe('Simple tests', function(){
 	it('should import .js and .json files by default', function() {
 		return Promise.all(requireDir('./simple')).then(function(actual) {
 			console.log('actual:' + JSON.stringify(actual));
-			actual.should.have.members([
-				'Content for file a.js', 
-				'These are the contents of file b.json']);
+			actual.should.deep.equal([
+				{file: 'a.js', contents: 'Content for file a.js'}, 
+				{file: 'b.json', contents: 'These are the contents of file b.json'}]);
 			return actual;
 		});
 	});

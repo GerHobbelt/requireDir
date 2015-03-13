@@ -44,7 +44,7 @@ module.exports = function requireDir(dir, opts) {
 
         return _.values(map);
     }).map(function(m) { 
-        return require(Path.resolve(dir, m)); 
+        return { file: m, contents: require(Path.resolve(dir, m))}; 
     });
 
     for (var i = 0; i < files.length; i++) {
