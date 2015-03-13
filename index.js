@@ -18,10 +18,9 @@ function requireFile(dir, file, opts) {
     return require(Path.resolve(dir, file));
 }
 
-module.exports = function requireDir(dir, opts) {
+module.exports = function requireDir(dir) {
     // default arguments:
     dir = dir || '.';
-    opts = opts || {};
 
     // resolve the path to an absolute one:
     dir = Path.resolve(parentDir, dir);
@@ -31,6 +30,6 @@ module.exports = function requireDir(dir, opts) {
             return _.has(require.extensions, Path.extname(f)); 
         })
         .map(function(m) { 
-            return { file: m, contents: requireFile(dir, m) };
+            return { fileName: m, contents: requireFile(dir, m) };
         });
 };
