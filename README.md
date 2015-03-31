@@ -1,10 +1,16 @@
-[![Build Status](https://travis-ci.org/aseemk/requireDir.svg?branch=master)](https://travis-ci.org/aseemk/requireDir)
+[![Build Status](https://travis-ci.org/dclucas/require-dir-promise.svg)](https://travis-ci.org/dclucas/require-dir-promise)
 
-# requireDir()
+[![Coverage Status](https://coveralls.io/repos/dclucas/require-dir-promise/badge.svg)](https://coveralls.io/r/dclucas/require-dir-promise)
 
-Node helper to `require()` directories. The directory's files are examined,
-and each one that can be `require()`'d is `require()`'d and returned as part
-of a hash from that file's basename to its exported contents.
+# require-dir-promise
+
+A promise-based `require` for directories, heavily inpired by [require-dir]
+(https://github.com/aseemk/requireDir).
+
+Iterates (non-recursively for now) through a directory and requires all 
+"requirable" files. Unline most synchronous modules, `require-dir-promise` 
+returns a collection of promises that can be chained in `.then()`, `.all()`
+and other promise calls.
 
 ## Example
 
@@ -18,93 +24,36 @@ dir
 + d.txt
 ```
 
-`requireDir('./dir')` will return the equivalent of:
+`requireDir('./dir')` will return promises with the following contents:
 
 ```js
-{ a: require('./dir/a.js')
-, b: require('./dir/b.json')
-}
+{file: 'a.js', contents: 'Content for file a.js'}, 
+
+{file: 'b.json', contents: 'Contents of file b.json'}
+
 ```
 
-And if CoffeeScript was registered, `c.coffee` will also be returned.
+And if CoffeeScript was registered, `{file: 'c.coffee', contents: 'Contents of file c.coffee'}` 
+will also be returned.
 
 ## Installation
 
 ```
-npm install require-dir
+npm install require-dir-promise
 ```
-
-Note that this package is *not* `requireDir` — turns out that's already
-[taken](https://github.com/JamesEggers1/node-requiredir)! ;)
 
 ## Usage
 
-Basic usage that examines only directories' immediate files:
+Iterating over the loaded files
 
 ```js
-var requireDir = require('require-dir');
-var dir = requireDir('./path/to/dir');
+var requireDir = require('require-dir-promise');
+requireDir('./path/to/dir').map(function(f) {
+    console.log(f.fileName);
+});
 ```
 
-You can optionally customize the behavior by passing an extra options object:
-
-```js
-var dir = requireDir('./path/to/dir', {recurse: true});
-```
-
-## Options
-
-`recurse`: Whether to recursively `require()` subdirectories too.
-Default is false.
-
-`duplicates`: By default, if multiple files share the same basename, only the
-highest priority one is `require()`'d and returned. (Priority is determined by
-the order of `require.extensions` keys, with directories taking precedence
-over files if `recurse` is true.) Specifying this option `require()`'s all
-files and returns full filename keys in addition to basename keys.
-Default is false.
-
-E.g. in the example above, if there were also an `a.json`, the behavior would
-be the same by default, but specifying `duplicates: true` would yield:
-
-```js
-{ a: require('./dir/a.js')
-, 'a.js': require('./dir/a.js')
-, 'a.json': require('./dir/a.json')
-, b: require('./dir/b.json')
-, 'b.json': require('./dir/b.json')
-}
-```
-
-There might be more options in the future. ;)
-
-## Tips
-
-If you want to `require()` the same directory in multiple places, you can do
-this in the directory itself! Just make an `index.js` file with the following:
-
-```js
-module.exports = require('require-dir')();   // defaults to '.'
-```
-
-And don't worry, the calling file is always ignored to prevent infinite loops.
-
-## TODO
-
-It'd be awesome if this could work with the regular `require()`, e.g. like a
-regular `require()` hook. Not sure that's possible though; directories are
-already special-cased to look for an `index` file or `package.json`.
-
-An `ignore` option would be nice: a string or regex, or an array of either or
-both, of paths, relative to the directory, to ignore. String paths can be
-extensionless to ignore all extensions for that path. Supporting shell-style
-globs in string paths would be nice.
-
-Currently, basenames are derived for directories too — e.g. a directory named
-`a.txt` will be returned as `a` when recursing — but should that be the case?
-Maybe directories should always be returned by their full name, and/or maybe
-this behavior should be customizable. This is hopefully an edge case.
 
 ## License
 
-MIT. &copy; 2012 Aseem Kishore.
+MIT.

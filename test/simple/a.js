@@ -1,1 +1,1 @@
-module.exports = 'a';
+module.exports = 'Contents of file a.js';

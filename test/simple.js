@@ -1,20 +1,32 @@
 var assert = require('assert');
 var requireDir = require('..');
+var Promise = require('bluebird');
+var chai = require('chai');
+chai.use(require('chai-as-promised'));
+chai.should();
 
-// first test regularly:
-assert.deepEqual(requireDir('./simple'), {
-    a: 'a',
-    b: 'b',
+describe('Simple tests', function(){
+	it('should import .js and .json files by default', function() {
+		return Promise.all(requireDir('./simple')).then(function(actual) {
+			actual.should.deep.equal([
+				{fileName: 'a.js', contents: 'Contents of file a.js'}, 
+				{fileName: 'b.json', contents: 'Contents of file b.json'}]);
+			return actual;
+		});
+	});
 });
 
-// now register CoffeeScript and do it again:
-// note that CoffeeScript shouldn't be used by any other tests! we can't rely
-// on ordering of tests, and require.extensions and require.cache are global.
-require('coffee-script');
-assert.deepEqual(requireDir('./simple'), {
-    a: 'a',
-    b: 'b',
-    c: 'c',
+describe('Simple tests', function(){
+	it('should include .coffee files if coffee-script has been required', function() {
+		require('coffee-script');
+		return Promise.all(requireDir('./simple')).then(function(actual) {
+			actual.should.deep.equal([
+				{fileName: 'a.js', contents: 'Contents of file a.js'}, 
+				{fileName: 'b.json', contents: 'Contents of file b.json'},
+				{fileName: 'c.coffee', contents: 'Contents of file c.coffee'}
+			]);
+			return actual;
+		});
+	});
 });
 
-console.log('Simple tests passed.');
